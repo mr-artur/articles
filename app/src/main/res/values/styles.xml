@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ArticleToolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <style name="BottombarIcon">
+        <item name="android:layout_width">@dimen/icon_size_large_56</item>
+        <item name="android:layout_height">@dimen/icon_size_large_56</item>
+        <item name="android:padding">@dimen/spacing_normal_16</item>
+        <item name="android:tint">@color/tint_color</item>
+        <item name="android:background">@drawable/ripple</item>
+    </style>
+
+</resources>
