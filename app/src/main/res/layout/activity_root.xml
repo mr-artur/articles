@@ -5,7 +5,8 @@
     android:id="@+id/coordinator_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.RootActivity">
+    tools:context=".ui.RootActivity"
+    tools:ignore="RtlHardcoded">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -40,12 +41,26 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <com.arturo.ru.skillbranch.skillarticles.ui.custom.ArticleSubmenu
+        android:id="@+id/submenu"
+        android:layout_width="@dimen/submenu_width"
+        android:layout_height="@dimen/submenu_height"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="@dimen/spacing_small_8"
+        android:layout_marginBottom="@dimen/spacing_small_8"
+        android:elevation="@dimen/elevation_large_8"
+        android:theme="@style/Theme.ArticleBar"
+        android:visibility="gone"
+        app:layout_dodgeInsetEdges="bottom"
+        tools:visibility="visible" />
+
     <com.arturo.ru.skillbranch.skillarticles.ui.custom.Bottombar
         android:id="@+id/bottombar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:elevation="@dimen/elevation_normal_4"
-        android:theme="@style/Theme.ArticleBar" />
+        android:theme="@style/Theme.ArticleBar"
+        app:layout_insetEdge="bottom" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

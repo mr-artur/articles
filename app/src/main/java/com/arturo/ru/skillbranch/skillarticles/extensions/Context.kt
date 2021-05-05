@@ -17,5 +17,9 @@ fun Context.dpToIntPx(dp: Int): Int {
 }
 
 fun Context.getIntDimension(@DimenRes dimensionId: Int): Int {
-    return resources.getDimension(dimensionId).toInt()
+    return getDimension(dimensionId).toInt()
+}
+
+fun Context.getDimension(@DimenRes dimensionId: Int): Float {
+    return resources.getDimension(dimensionId)
 }
