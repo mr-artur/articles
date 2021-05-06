@@ -1,25 +1,65 @@
 package com.arturo.ru.skillbranch.skillarticles.viewmodels
 
+import androidx.lifecycle.LiveData
+import com.arturo.ru.skillbranch.skillarticles.data.ArticleData
+import com.arturo.ru.skillbranch.skillarticles.data.ArticlePersonalInfo
 import com.arturo.ru.skillbranch.skillarticles.data.repositories.ArticleRepository
+import com.arturo.ru.skillbranch.skillarticles.extensions.data.toAppSettings
+import com.arturo.ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
+import com.arturo.ru.skillbranch.skillarticles.extensions.format
 
-class ArticleViewModel(articleId: String) : BaseViewModel<ArticleState>(ArticleState()) {
+class ArticleViewModel(private val articleId: String) :
+    BaseViewModel<ArticleState>(ArticleState()) {
 
     private val repository = ArticleRepository
 
     init {
+        subscribeOnDataSource(getArticleData()) { article, state ->
+            article ?: return@subscribeOnDataSource null
+            state.copy(
+                shareLink = article.shareLink,
+                title = article.title,
+                category = article.category,
+                categoryIcon = article.categoryIcon,
+                date = article.date.format()
+            )
+        }
 
+        subscribeOnDataSource(getArticleContent()) { content, state ->
+            content ?: return@subscribeOnDataSource null
+            state.copy(
+                isLoadingContent = false,
+                content = content
+            )
+        }
+
+        subscribeOnDataSource(getArticlePersonalInfo()) { info, state ->
+            info ?: return@subscribeOnDataSource null
+            state.copy(
+                isBookmark = info.isBookmark,
+                isLike = info.isLike
+            )
+        }
+
+        subscribeOnDataSource(repository.getAppSettings()) { settings, state ->
+            state.copy(
+                isDarkMode = settings.isDarkMode,
+                isBigText = settings.isBigText
+            )
+        }
     }
 
     fun handleSwitchMode() {
-        updateState { it.copy(isDarkMode = !it.isDarkMode) }
+        val settings = currentState.toAppSettings()
+        repository.updateSettings(settings.copy(isDarkMode = !settings.isDarkMode))
     }
 
     fun handleDownText() {
-        TODO("Not yet implemented")
+        repository.updateSettings(currentState.toAppSettings().copy(isBigText = false))
     }
 
     fun handleUpText() {
-        TODO("Not yet implemented")
+        repository.updateSettings(currentState.toAppSettings().copy(isBigText = true))
     }
 
     fun handleToggleMenu() {
@@ -27,7 +67,8 @@ class ArticleViewModel(articleId: String) : BaseViewModel<ArticleState>(ArticleS
     }
 
     fun handleShare() {
-        TODO("Not yet implemented")
+        val msg = "Share is not implemented"
+        notify(Notification.ErrorMessage(msg, "OK", null))
     }
 
     fun handleBookmark() {
@@ -35,7 +76,37 @@ class ArticleViewModel(articleId: String) : BaseViewModel<ArticleState>(ArticleS
     }
 
     fun handleLike() {
-        TODO("Not yet implemented")
+
+        val toggleLike = {
+            val info = currentState.toArticlePersonalInfo()
+            repository.updateArticlePersonalInfo(info.copy(isLike = !info.isLike))
+        }
+        toggleLike()
+
+        val msg = if (currentState.isLike) Notification.TextMessage("Article is liked")
+        else {
+            Notification.ActionMessage(
+                "Don't like it anymore?",
+                "No, still like it",
+                toggleLike
+            )
+        }
+        notify(msg)
+    }
+
+    // load text from network
+    private fun getArticleContent(): LiveData<List<Any>?> {
+        return repository.loadArticleContent(articleId)
+    }
+
+    // load data from db
+    private fun getArticleData(): LiveData<ArticleData?> {
+        return repository.getArticle(articleId)
+    }
+
+    // load data from db
+    private fun getArticlePersonalInfo(): LiveData<ArticlePersonalInfo?> {
+        return repository.loadArticlePersonalInfo(articleId)
     }
 }
 
