@@ -21,8 +21,8 @@ class ArticleSubmenu @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private var isOpen: Boolean = false
-    private var centerX: Float = context.getDimension(R.dimen.submenu_width)
-    private var centerY: Float = context.getDimension(R.dimen.submenu_height)
+    private var rightBottomX: Float = context.getDimension(R.dimen.submenu_width)
+    private var rightBottomY: Float = context.getDimension(R.dimen.submenu_height)
 
     init {
         View.inflate(context, R.layout.layout_article_submenu, this)
@@ -44,11 +44,11 @@ class ArticleSubmenu @JvmOverloads constructor(
     }
 
     private fun animateShow() {
-        val endRadius = hypot(centerX, centerY).toInt()
+        val endRadius = hypot(rightBottomX, rightBottomY).toInt()
         val anim = ViewAnimationUtils.createCircularReveal(
             this,
-            centerX.toInt(),
-            centerY.toInt(),
+            rightBottomX.toInt(),
+            rightBottomY.toInt(),
             0f,
             endRadius.toFloat()
         )
@@ -59,11 +59,11 @@ class ArticleSubmenu @JvmOverloads constructor(
     }
 
     private fun animateHide() {
-        val endRadius = hypot(centerX, centerY).toInt()
+        val endRadius = hypot(rightBottomX, rightBottomY).toInt()
         val anim = ViewAnimationUtils.createCircularReveal(
             this,
-            centerX.toInt(),
-            centerY.toInt(),
+            rightBottomX.toInt(),
+            rightBottomY.toInt(),
             endRadius.toFloat(),
             0f
         )
