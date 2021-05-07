@@ -1,9 +1,9 @@
-package com.arturo.ru.skillbranch.skillarticles.data
+package ru.skillbranch.skillarticles.data
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.arturo.ru.skillbranch.skillarticles.R
+import ru.skillbranch.skillarticles.R
 import kotlinx.coroutines.*
 import java.util.*
 

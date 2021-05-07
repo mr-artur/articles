@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.RootActivity"
+    tools:context="ru.skillbranch.skillarticles.ui.RootActivity"
     tools:ignore="RtlHardcoded">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -41,7 +41,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.arturo.ru.skillbranch.skillarticles.ui.custom.ArticleSubmenu
+    <ru.skillbranch.skillarticles.ui.custom.ArticleSubmenu
         android:id="@+id/submenu"
         android:layout_width="@dimen/submenu_width"
         android:layout_height="@dimen/submenu_height"
@@ -54,7 +54,7 @@
         app:layout_dodgeInsetEdges="bottom"
         tools:visibility="visible" />
 
-    <com.arturo.ru.skillbranch.skillarticles.ui.custom.Bottombar
+    <ru.skillbranch.skillarticles.ui.custom.Bottombar
         android:id="@+id/bottombar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

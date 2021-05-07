@@ -1,7 +1,7 @@
-package com.arturo.ru.skillbranch.skillarticles.data.repositories
+package ru.skillbranch.skillarticles.data.repositories
 
 import androidx.lifecycle.LiveData
-import com.arturo.ru.skillbranch.skillarticles.data.*
+import ru.skillbranch.skillarticles.data.*
 
 object ArticleRepository {
 

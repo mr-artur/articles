@@ -1,4 +1,4 @@
-package com.arturo.ru.skillbranch.skillarticles.ui.custom
+package ru.skillbranch.skillarticles.ui.custom
 
 import android.content.Context
 import android.util.AttributeSet

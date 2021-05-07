@@ -1,4 +1,4 @@
-package com.arturo.ru.skillbranch.skillarticles.extensions
+package ru.skillbranch.skillarticles.extensions
 
 import android.content.Context
 import android.util.TypedValue

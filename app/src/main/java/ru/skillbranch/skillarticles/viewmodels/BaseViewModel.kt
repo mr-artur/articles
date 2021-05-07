@@ -1,4 +1,4 @@
-package com.arturo.ru.skillbranch.skillarticles.viewmodels
+package ru.skillbranch.skillarticles.viewmodels
 
 import androidx.annotation.UiThread
 import androidx.lifecycle.*

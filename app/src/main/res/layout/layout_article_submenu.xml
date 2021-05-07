@@ -7,7 +7,7 @@
     tools:layout_height="@dimen/submenu_height"
     tools:layout_width="@dimen/submenu_width">
 
-    <com.arturo.ru.skillbranch.skillarticles.ui.custom.CheckableImageView
+    <ru.skillbranch.skillarticles.ui.custom.CheckableImageView
         android:id="@+id/btn_text_down"
         android:layout_width="0dp"
         android:layout_height="@dimen/icon_size_normal_40"
@@ -29,7 +29,7 @@
         app:layout_constraintStart_toEndOf="@id/btn_text_down"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.arturo.ru.skillbranch.skillarticles.ui.custom.CheckableImageView
+    <ru.skillbranch.skillarticles.ui.custom.CheckableImageView
         android:id="@+id/btn_text_up"
         android:layout_width="0dp"
         android:layout_height="@dimen/icon_size_normal_40"

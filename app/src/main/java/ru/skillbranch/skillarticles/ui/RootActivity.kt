@@ -1,4 +1,4 @@
-package com.arturo.ru.skillbranch.skillarticles.ui
+package ru.skillbranch.skillarticles.ui
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
-import com.arturo.ru.skillbranch.skillarticles.R
-import com.arturo.ru.skillbranch.skillarticles.extensions.getIntDimension
-import com.arturo.ru.skillbranch.skillarticles.viewmodels.ArticleState
-import com.arturo.ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
-import com.arturo.ru.skillbranch.skillarticles.viewmodels.Notification
-import com.arturo.ru.skillbranch.skillarticles.viewmodels.ViewModelFactory
+import ru.skillbranch.skillarticles.R
+import ru.skillbranch.skillarticles.extensions.getIntDimension
+import ru.skillbranch.skillarticles.viewmodels.ArticleState
+import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
+import ru.skillbranch.skillarticles.viewmodels.Notification
+import ru.skillbranch.skillarticles.viewmodels.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_root.*
 import kotlinx.android.synthetic.main.layout_article_submenu.*
@@ -112,9 +112,8 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
 
             is Notification.ActionMessage -> {
                 with(snackbar) {
-                    setActionTextColor(getColor(R.color.color_accent_dark))
                     setAction(notification.actionLabel) {
-                        notification.actionHandler?.invoke()
+                        notification.actionHandler.invoke()
                     }
                 }
             }
