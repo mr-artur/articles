@@ -27,7 +27,7 @@ abstract class BaseViewModel<T>(initState: T) : ViewModel() {
     }
 
     fun observeState(owner: LifecycleOwner, onChanged: (newState: T) -> Unit) {
-        state.observe(owner, { onChanged(it) })
+        state.observe(owner, Observer { onChanged(it) })
     }
 
     fun observeNotifications(
