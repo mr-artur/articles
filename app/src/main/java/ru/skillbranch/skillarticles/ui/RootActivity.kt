@@ -66,7 +66,7 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
     private fun setupSubmenu() {
         btn_text_up.setOnClickListener { viewModel.handleUpText() }
         btn_text_down.setOnClickListener { viewModel.handleDownText() }
-        switch_mode.setOnClickListener { viewModel.handleSwitchMode() }
+        switch_mode.setOnClickListener { viewModel.handleNightMode() }
     }
 
     private fun renderUi(data: ArticleState) {

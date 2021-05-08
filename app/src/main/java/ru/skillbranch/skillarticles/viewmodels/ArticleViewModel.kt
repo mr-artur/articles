@@ -9,7 +9,7 @@ import ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
 import ru.skillbranch.skillarticles.extensions.format
 
 class ArticleViewModel(private val articleId: String) :
-    BaseViewModel<ArticleState>(ArticleState()) {
+    BaseViewModel<ArticleState>(ArticleState()), IArticleViewModel {
 
     private val repository = ArticleRepository
 
@@ -49,33 +49,41 @@ class ArticleViewModel(private val articleId: String) :
         }
     }
 
-    fun handleSwitchMode() {
+    override fun handleNightMode() {
         val settings = currentState.toAppSettings()
         repository.updateSettings(settings.copy(isDarkMode = !settings.isDarkMode))
     }
 
-    fun handleDownText() {
+    override fun handleDownText() {
         repository.updateSettings(currentState.toAppSettings().copy(isBigText = false))
     }
 
-    fun handleUpText() {
+    override fun handleUpText() {
         repository.updateSettings(currentState.toAppSettings().copy(isBigText = true))
     }
 
-    fun handleToggleMenu() {
+    override fun handleToggleMenu() {
         updateState { it.copy(isShowMenu = !it.isShowMenu) }
     }
 
-    fun handleShare() {
+    override fun handleSearchMode(isSearch: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    override fun handleSearch(query: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun handleShare() {
         val msg = "Share is not implemented"
         notify(Notification.ErrorMessage(msg, "OK", null))
     }
 
-    fun handleBookmark() {
+    override fun handleBookmark() {
         TODO("Not yet implemented")
     }
 
-    fun handleLike() {
+    override fun handleLike() {
 
         val toggleLike = {
             val info = currentState.toArticlePersonalInfo()
@@ -95,17 +103,17 @@ class ArticleViewModel(private val articleId: String) :
     }
 
     // load text from network
-    private fun getArticleContent(): LiveData<List<Any>?> {
+    override fun getArticleContent(): LiveData<List<Any>?> {
         return repository.loadArticleContent(articleId)
     }
 
     // load data from db
-    private fun getArticleData(): LiveData<ArticleData?> {
+    override fun getArticleData(): LiveData<ArticleData?> {
         return repository.getArticle(articleId)
     }
 
     // load data from db
-    private fun getArticlePersonalInfo(): LiveData<ArticlePersonalInfo?> {
+    override fun getArticlePersonalInfo(): LiveData<ArticlePersonalInfo?> {
         return repository.loadArticlePersonalInfo(articleId)
     }
 }
