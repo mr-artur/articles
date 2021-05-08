@@ -21,7 +21,8 @@ class ArticleViewModel(private val articleId: String) :
                 title = article.title,
                 category = article.category,
                 categoryIcon = article.categoryIcon,
-                date = article.date.format()
+                date = article.date.format(),
+                author = article.author
             )
         }
 
@@ -80,7 +81,10 @@ class ArticleViewModel(private val articleId: String) :
     }
 
     override fun handleBookmark() {
-        TODO("Not yet implemented")
+        val info = currentState.toArticlePersonalInfo()
+        repository.updateArticlePersonalInfo(info.copy(isBookmark = !info.isBookmark))
+        val msg = if (currentState.isBookmark) "Add to bookmarks" else "Remove from bookmarks"
+        notify(Notify.TextMessage(msg))
     }
 
     override fun handleLike() {
@@ -91,10 +95,10 @@ class ArticleViewModel(private val articleId: String) :
         }
         toggleLike()
 
-        val msg = if (currentState.isLike) Notify.TextMessage("Article is liked")
+        val msg = if (currentState.isLike) Notify.TextMessage("Mark is liked")
         else {
             Notify.ActionMessage(
-                "Don't like it anymore?",
+                "Don`t like it anymore",
                 "No, still like it",
                 toggleLike
             )
