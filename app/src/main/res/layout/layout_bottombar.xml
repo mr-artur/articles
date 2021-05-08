@@ -5,7 +5,7 @@
     tools:context="ru.skillbranch.skillarticles.ui.RootActivity"
     tools:ignore="ContentDescription"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
-    tools:theme="@style/Theme.ArticleBar">
+    tools:theme="@style/ArticleBarsTheme">
 
     <ru.skillbranch.skillarticles.ui.custom.CheckableImageView
         android:id="@+id/btn_like"
