@@ -12,7 +12,7 @@ import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.getIntDimension
 import ru.skillbranch.skillarticles.viewmodels.ArticleState
 import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
-import ru.skillbranch.skillarticles.viewmodels.Notification
+import ru.skillbranch.skillarticles.viewmodels.Notify
 import ru.skillbranch.skillarticles.viewmodels.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_root.*
@@ -101,16 +101,16 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
         if (data.categoryIcon != null) toolbar.logo = getDrawable(data.categoryIcon as Int)
     }
 
-    private fun renderNotification(notification: Notification) {
+    private fun renderNotification(notification: Notify) {
         val snackbar = Snackbar.make(coordinator_container, notification.message, Snackbar.LENGTH_LONG)
                 .setAnchorView(bottombar)
                 .setActionTextColor(getColor(R.color.color_accent_dark))
 
         when (notification) {
 
-            is Notification.TextMessage -> { /* nothing */ }
+            is Notify.TextMessage -> { /* nothing */ }
 
-            is Notification.ActionMessage -> {
+            is Notify.ActionMessage -> {
                 with(snackbar) {
                     setAction(notification.actionLabel) {
                         notification.actionHandler.invoke()
@@ -118,7 +118,7 @@ class RootActivity : AppCompatActivity(R.layout.activity_root) {
                 }
             }
 
-            is Notification.ErrorMessage -> {
+            is Notify.ErrorMessage -> {
                 with(snackbar) {
                     setBackgroundTint(getColor(R.color.design_default_color_error))
                     setTextColor(getColor(android.R.color.white))

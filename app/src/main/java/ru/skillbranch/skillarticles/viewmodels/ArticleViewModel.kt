@@ -76,7 +76,7 @@ class ArticleViewModel(private val articleId: String) :
 
     override fun handleShare() {
         val msg = "Share is not implemented"
-        notify(Notification.ErrorMessage(msg, "OK", null))
+        notify(Notify.ErrorMessage(msg, "OK", null))
     }
 
     override fun handleBookmark() {
@@ -91,9 +91,9 @@ class ArticleViewModel(private val articleId: String) :
         }
         toggleLike()
 
-        val msg = if (currentState.isLike) Notification.TextMessage("Article is liked")
+        val msg = if (currentState.isLike) Notify.TextMessage("Article is liked")
         else {
-            Notification.ActionMessage(
+            Notify.ActionMessage(
                 "Don't like it anymore?",
                 "No, still like it",
                 toggleLike
