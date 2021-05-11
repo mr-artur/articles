@@ -15,7 +15,7 @@ abstract class BaseViewModel<T>(initState: T) : ViewModel() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val notifications = MutableLiveData<Event<Notify>>()
 
-    protected val currentState: T
+    val currentState: T
         get() = state.value!!
 
     @UiThread

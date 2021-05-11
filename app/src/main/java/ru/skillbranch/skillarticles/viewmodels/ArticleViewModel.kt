@@ -68,11 +68,11 @@ class ArticleViewModel(private val articleId: String) :
     }
 
     override fun handleSearchMode(isSearch: Boolean) {
-        TODO("Not yet implemented")
+        updateState { it.copy(isSearch = isSearch) }
     }
 
     override fun handleSearch(query: String?) {
-        TODO("Not yet implemented")
+        updateState { it.copy(searchQuery = query) }
     }
 
     override fun handleShare() {
