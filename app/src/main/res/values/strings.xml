@@ -3,5 +3,6 @@
     <string name="app_name">Skill Articles</string>
 
     <string name="submenu_dark_mode">Темный режим</string>
+    <string name="menu_title_search">Поиск</string>
 
 </resources>
