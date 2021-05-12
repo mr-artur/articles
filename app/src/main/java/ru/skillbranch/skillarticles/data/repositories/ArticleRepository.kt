@@ -8,7 +8,7 @@ object ArticleRepository {
     private val local = LocalDataHolder
     private val network = NetworkDataHolder
 
-    fun loadArticleContent(articleId: String): LiveData<List<Any>?> {
+    fun loadArticleContent(articleId: String): LiveData<List<String>?> {
         return network.loadArticleContent(articleId)
     }
 

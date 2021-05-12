@@ -33,6 +33,17 @@ abstract class BaseViewModel<T>(initState: T) : ViewModel() {
         state.observe(owner, Observer { onChanged(it) })
     }
 
+    fun <D> observeSubState(
+        owner: LifecycleOwner,
+        transform: (T) -> D,
+        onChanged: (substate: D) -> Unit
+    ) {
+        state
+            .map(transform)
+            .distinctUntilChanged()
+            .observe(owner, Observer { onChanged(it) })
+    }
+
     fun observeNotifications(
         owner: LifecycleOwner,
         onNotify: (notification: Notify) -> Unit

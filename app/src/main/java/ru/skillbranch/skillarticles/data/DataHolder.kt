@@ -74,9 +74,9 @@ object NetworkDataHolder {
     private var isDelay = true
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val content = MutableLiveData<List<Any>?>()
+    val content = MutableLiveData<List<String>?>()
 
-    fun loadArticleContent(articleId: String): LiveData<List<Any>?> {
+    fun loadArticleContent(articleId: String): LiveData<List<String>?> {
         GlobalScope.launch {
             if (isDelay) delay(1500)
             withContext(Dispatchers.Main) {

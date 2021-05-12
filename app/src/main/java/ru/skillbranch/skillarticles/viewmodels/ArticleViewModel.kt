@@ -7,6 +7,7 @@ import ru.skillbranch.skillarticles.data.repositories.ArticleRepository
 import ru.skillbranch.skillarticles.extensions.data.toAppSettings
 import ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
 import ru.skillbranch.skillarticles.extensions.format
+import ru.skillbranch.skillarticles.extensions.indexesOf
 
 class ArticleViewModel(private val articleId: String) :
     BaseViewModel<ArticleState>(ArticleState()), IArticleViewModel {
@@ -68,11 +69,24 @@ class ArticleViewModel(private val articleId: String) :
     }
 
     override fun handleSearchMode(isSearch: Boolean) {
-        updateState { it.copy(isSearch = isSearch) }
+        updateState { it.copy(isSearch = isSearch, isShowMenu = false, searchPosition = 0) }
     }
 
     override fun handleSearch(query: String?) {
-        updateState { it.copy(searchQuery = query) }
+        query ?: return
+
+        val result = currentState.content.firstOrNull().indexesOf(query)
+            .map { it to it + query.length }
+
+        updateState { it.copy(searchQuery = query, searchResults = result) }
+    }
+
+    override fun handleUpResult() {
+        updateState { it.copy(searchPosition = it.searchPosition.dec()) }
+    }
+
+    override fun handleDownResult() {
+        updateState { it.copy(searchPosition = it.searchPosition.inc()) }
     }
 
     override fun handleShare() {
@@ -107,7 +121,7 @@ class ArticleViewModel(private val articleId: String) :
     }
 
     // load text from network
-    override fun getArticleContent(): LiveData<List<Any>?> {
+    override fun getArticleContent(): LiveData<List<String>?> {
         return repository.loadArticleContent(articleId)
     }
 
@@ -142,6 +156,21 @@ data class ArticleState(
     val date: String? = null,                              // дата публикации
     val author: Any? = null,                               // автор статьи
     val poster: String? = null,                            // обложка статьи
-    val content: List<Any> = emptyList(),                  // контент
+    val content: List<String> = emptyList(),                  // контент
     val reviews: List<Any> = emptyList()                   // комментарии
+)
+
+data class BottombarData(
+    val isLike: Boolean = false,                           // отмечено как понравившееся
+    val isBookmark: Boolean = false,                       // добавлено в закладки
+    val isShowMenu: Boolean = false,                       // меню отображается
+    val isSearch: Boolean = false,                         // режим поиска
+    val resultsCount: Int = 0,                             // количество найденных вхождений
+    val searchPosition: Int = 0                            // текущая позиция поиска
+)
+
+data class SubmenuData(
+    val isShowMenu: Boolean = false,                       // меню отображается
+    val isBigText: Boolean = false,                        // шрифт увеличен
+    val isDarkMode: Boolean = false                        // темный режим
 )
