@@ -12,7 +12,7 @@ import ru.skillbranch.skillarticles.extensions.indexesOf
 class ArticleViewModel(private val articleId: String) :
     BaseViewModel<ArticleState>(ArticleState()), IArticleViewModel {
 
-    private val repository = ArticleRepository
+    private val repository = ArticleRepository()
 
     init {
         subscribeOnDataSource(getArticleData()) { article, state ->

@@ -3,10 +3,12 @@ package ru.skillbranch.skillarticles.data.repositories
 import androidx.lifecycle.LiveData
 import ru.skillbranch.skillarticles.data.*
 
-object ArticleRepository {
+class ArticleRepository(
+    private val local: LocalDataHolder = LocalDataHolder,
+    private val network: NetworkDataHolder = NetworkDataHolder,
+    private val prefs: PrefManager = PrefManager()
+) {
 
-    private val local = LocalDataHolder
-    private val network = NetworkDataHolder
 
     fun loadArticleContent(articleId: String): LiveData<List<String>?> {
         return network.loadArticleContent(articleId)
@@ -20,10 +22,11 @@ object ArticleRepository {
         return local.findArticlePersonalInfo(articleId)
     }
 
-    fun getAppSettings(): LiveData<AppSettings> = local.getAppSettings()
+    fun getAppSettings(): LiveData<AppSettings> = prefs.settings
 
     fun updateSettings(appSettings: AppSettings) {
-        local.updateAppSettings(appSettings)
+        prefs.isBigText = appSettings.isBigText
+        prefs.isDarkMode = appSettings.isDarkMode
     }
 
     fun updateArticlePersonalInfo(info: ArticlePersonalInfo) {

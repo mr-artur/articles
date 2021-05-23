@@ -3,14 +3,20 @@ package ru.skillbranch.skillarticles.ui
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Selection
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.ScrollingMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.text.getSpans
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.getIntDimension
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +26,9 @@ import ru.skillbranch.skillarticles.databinding.LayoutBottombarBinding
 import ru.skillbranch.skillarticles.extensions.data.toBottombarData
 import ru.skillbranch.skillarticles.extensions.data.toSubmenuData
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
+import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
+import ru.skillbranch.skillarticles.ui.custom.SearchSpan
+import ru.skillbranch.skillarticles.ui.delegates.AttrValue
 import ru.skillbranch.skillarticles.ui.delegates.viewBinding
 import ru.skillbranch.skillarticles.viewmodels.*
 
@@ -27,12 +36,16 @@ import ru.skillbranch.skillarticles.viewmodels.*
 class RootActivity : AppCompatActivity(), IArticleView {
 
     private val viewModel: ArticleViewModel by viewModels { ViewModelFactory("0") }
+
     private val vb: ActivityRootBinding by viewBinding (ActivityRootBinding::inflate)
     private val vbBottombar : LayoutBottombarBinding
         get() = vb.bottombar.binding
     private val vbSubmenu : LayoutArticleSubmenuBinding
         get() = vb.submenu.binding
     private lateinit var searchView : SearchView
+
+    private val bgColor by AttrValue(R.attr.colorSecondary)
+    private val fgColor by AttrValue(R.attr.colorOnSecondary)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,12 +154,29 @@ class RootActivity : AppCompatActivity(), IArticleView {
 
         with(vb.tvTextContent) {
             textSize = if (data.isBigText) 18f else 14f
-            text = if (data.isLoadingContent) "Loading" else data.content.first() as String
+            setText(
+                if (data.isLoadingContent) "Loading" else data.content.first(),
+                TextView.BufferType.SPANNABLE
+            )
+            movementMethod = ScrollingMovementMethod()
         }
-        // bind toolbar
-        vb.toolbar.title = data.title ?: "loading"
-        vb.toolbar.subtitle = data.category ?: "loading"
-        if (data.categoryIcon != null) vb.toolbar.logo = getDrawable(data.categoryIcon as Int)
+
+        with(vb.toolbar) {
+            title = data.title ?: "loading"
+            subtitle = data.category ?: "loading"
+            if (data.categoryIcon != null) logo = getDrawable(data.categoryIcon as Int)
+        }
+
+        if (data.isLoadingContent) {
+            return
+        }
+
+        if (data.isSearch) {
+            renderSearchResult(data.searchResults)
+            renderSearchPosition(data.searchPosition)
+        } else {
+            clearSearchResult()
+        }
     }
 
     override fun renderBottombar(data: BottombarData) {
@@ -169,15 +199,44 @@ class RootActivity : AppCompatActivity(), IArticleView {
     }
 
     override fun renderSearchResult(searchResult: List<Pair<Int, Int>>) {
-        TODO("Not yet implemented")
+
+        val content = vb.tvTextContent.text as Spannable
+
+        clearSearchResult()
+
+        searchResult.forEach { (start, end) ->
+            content.setSpan(
+                SearchSpan(bgColor, fgColor),
+                start,
+                end,
+                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
     }
 
     override fun renderSearchPosition(searchPosition: Int) {
-        TODO("Not yet implemented")
+        val content = vb.tvTextContent.text as Spannable
+        val spans = content.getSpans<SearchSpan>()
+
+        content.getSpans<SearchFocusSpan>()
+            .forEach { content.removeSpan(it) }
+
+        if (spans.isNotEmpty()) {
+            val result = spans[searchPosition]
+            Selection.setSelection(content, content.getSpanStart(result))
+            content.setSpan(
+                SearchFocusSpan(bgColor, fgColor),
+                content.getSpanStart(result),
+                content.getSpanEnd(result),
+                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
     }
 
     override fun clearSearchResult() {
-        TODO("Not yet implemented")
+        val content = vb.tvTextContent.text as Spannable
+        content.getSpans<SearchSpan>()
+            .forEach { content.removeSpan(it) }
     }
 
     override fun showSearchBar(resultsCount: Int, searchPosition: Int) {
