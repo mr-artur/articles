@@ -23,8 +23,8 @@ import com.google.android.material.snackbar.Snackbar
 import ru.skillbranch.skillarticles.databinding.ActivityRootBinding
 import ru.skillbranch.skillarticles.databinding.LayoutArticleSubmenuBinding
 import ru.skillbranch.skillarticles.databinding.LayoutBottombarBinding
-import ru.skillbranch.skillarticles.extensions.data.toBottombarData
-import ru.skillbranch.skillarticles.extensions.data.toSubmenuData
+import ru.skillbranch.skillarticles.extensions.toBottombarData
+import ru.skillbranch.skillarticles.extensions.toSubmenuData
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
 import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
 import ru.skillbranch.skillarticles.ui.custom.SearchSpan
@@ -35,14 +35,14 @@ import ru.skillbranch.skillarticles.viewmodels.*
 @SuppressLint("UseCompatLoadingForDrawables")
 class RootActivity : AppCompatActivity(), IArticleView {
 
-    private val viewModel: ArticleViewModel by viewModels { ViewModelFactory("0") }
+    private val viewModel: ArticleViewModel by viewModels { ViewModelFactory(this, "0") }
 
-    private val vb: ActivityRootBinding by viewBinding (ActivityRootBinding::inflate)
-    private val vbBottombar : LayoutBottombarBinding
+    private val vb: ActivityRootBinding by viewBinding(ActivityRootBinding::inflate)
+    private val vbBottombar: LayoutBottombarBinding
         get() = vb.bottombar.binding
-    private val vbSubmenu : LayoutArticleSubmenuBinding
+    private val vbSubmenu: LayoutArticleSubmenuBinding
         get() = vb.submenu.binding
-    private lateinit var searchView : SearchView
+    private lateinit var searchView: SearchView
 
     private val bgColor by AttrValue(R.attr.colorSecondary)
     private val fgColor by AttrValue(R.attr.colorOnSecondary)
@@ -154,11 +154,10 @@ class RootActivity : AppCompatActivity(), IArticleView {
 
         with(vb.tvTextContent) {
             textSize = if (data.isBigText) 18f else 14f
-            setText(
-                if (data.isLoadingContent) "Loading" else data.content.first(),
-                TextView.BufferType.SPANNABLE
-            )
             movementMethod = ScrollingMovementMethod()
+            val content = if (data.isLoadingContent) "Loading" else data.content.first()
+            if (text.toString() == content) return@with
+            setText(content, TextView.BufferType.SPANNABLE)
         }
 
         with(vb.toolbar) {
@@ -254,10 +253,19 @@ class RootActivity : AppCompatActivity(), IArticleView {
         vb.scroll.setMarginOptionally(bottom = 0)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        viewModel.saveState()
+        super.onSaveInstanceState(outState)
+    }
+
     private fun renderNotification(notification: Notify) {
-        val snackbar = Snackbar.make(vb.coordinatorContainer, notification.message, Snackbar.LENGTH_LONG)
-                .setAnchorView(vb.bottombar)
-                .setActionTextColor(getColor(R.color.color_accent_dark))
+        val snackbar = Snackbar.make(
+            vb.coordinatorContainer,
+            notification.message,
+            Snackbar.LENGTH_LONG
+        )
+            .setAnchorView(vb.bottombar)
+            .setActionTextColor(getColor(R.color.color_accent_dark))
 
         when (notification) {
 

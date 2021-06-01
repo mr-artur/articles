@@ -1,20 +1,23 @@
 package ru.skillbranch.skillarticles.viewmodels
 
+import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import ru.skillbranch.skillarticles.data.ArticleData
 import ru.skillbranch.skillarticles.data.ArticlePersonalInfo
 import ru.skillbranch.skillarticles.data.repositories.ArticleRepository
-import ru.skillbranch.skillarticles.extensions.data.toAppSettings
-import ru.skillbranch.skillarticles.extensions.data.toArticlePersonalInfo
-import ru.skillbranch.skillarticles.extensions.format
-import ru.skillbranch.skillarticles.extensions.indexesOf
+import ru.skillbranch.skillarticles.extensions.*
 
-class ArticleViewModel(private val articleId: String) :
-    BaseViewModel<ArticleState>(ArticleState()), IArticleViewModel {
+class ArticleViewModel(private val articleId: String, savedStateHandle: SavedStateHandle) :
+    BaseViewModel<ArticleState>(ArticleState(), savedStateHandle), IArticleViewModel {
 
     private val repository = ArticleRepository()
 
     init {
+        // set custom saved state provider for non-serializable or custom states
+        savedStateHandle.setSavedStateProvider(KEY_STATE) { currentState.toBundle() }
+
         subscribeOnDataSource(getArticleData()) { article, state ->
             article ?: return@subscribeOnDataSource null
             state.copy(
@@ -158,7 +161,22 @@ data class ArticleState(
     val poster: String? = null,                            // обложка статьи
     val content: List<String> = emptyList(),                  // контент
     val reviews: List<Any> = emptyList()                   // комментарии
-)
+) : VMState {
+
+    override fun toBundle(): Bundle {
+        val map = copy(content = emptyList(), isLoadingContent = true)
+            .asMap()
+            .toList()
+            .toTypedArray()
+
+        return bundleOf(*map)
+    }
+
+    override fun fromBundle(bundle: Bundle): VMState? {
+        val map = bundle.keySet().associateWith { bundle[it] }
+        return fromMap(map)
+    }
+}
 
 data class BottombarData(
     val isLike: Boolean = false,                           // отмечено как понравившееся
