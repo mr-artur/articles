@@ -192,3 +192,18 @@ data class SubmenuData(
     val isBigText: Boolean = false,                        // шрифт увеличен
     val isDarkMode: Boolean = false                        // темный режим
 )
+
+fun ArticleState.toBottombarData(): BottombarData {
+    return BottombarData(
+        isLike,
+        isBookmark,
+        isShowMenu,
+        isSearch,
+        searchResults.size,
+        searchPosition
+    )
+}
+
+fun ArticleState.toSubmenuData(): SubmenuData {
+    return SubmenuData(isShowMenu, isBigText, isDarkMode)
+}

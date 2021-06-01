@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.SearchView
@@ -23,8 +24,6 @@ import com.google.android.material.snackbar.Snackbar
 import ru.skillbranch.skillarticles.databinding.ActivityRootBinding
 import ru.skillbranch.skillarticles.databinding.LayoutArticleSubmenuBinding
 import ru.skillbranch.skillarticles.databinding.LayoutBottombarBinding
-import ru.skillbranch.skillarticles.extensions.toBottombarData
-import ru.skillbranch.skillarticles.extensions.toSubmenuData
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
 import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
 import ru.skillbranch.skillarticles.ui.custom.SearchSpan
@@ -35,7 +34,14 @@ import ru.skillbranch.skillarticles.viewmodels.*
 @SuppressLint("UseCompatLoadingForDrawables")
 class RootActivity : AppCompatActivity(), IArticleView {
 
-    private val viewModel: ArticleViewModel by viewModels { ViewModelFactory(this, "0") }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val viewModel: ArticleViewModel by viewModels { ViewModelFactory(this, "0") }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val bgColor by AttrValue(R.attr.colorSecondary)
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val fgColor by AttrValue(R.attr.colorOnSecondary)
 
     private val vb: ActivityRootBinding by viewBinding(ActivityRootBinding::inflate)
     private val vbBottombar: LayoutBottombarBinding
@@ -43,9 +49,6 @@ class RootActivity : AppCompatActivity(), IArticleView {
     private val vbSubmenu: LayoutArticleSubmenuBinding
         get() = vb.submenu.binding
     private lateinit var searchView: SearchView
-
-    private val bgColor by AttrValue(R.attr.colorSecondary)
-    private val fgColor by AttrValue(R.attr.colorOnSecondary)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +58,7 @@ class RootActivity : AppCompatActivity(), IArticleView {
         setupSubmenu()
 
         viewModel.observeState(this, ::renderUi)
-        viewModel.observeSubState(this, ArticleState::toBottombarData, ::renderBottombar)
+        viewModel.observeSubState(this, ArticleState::toBottombarData, ::renderBotombar)
         viewModel.observeSubState(this, ArticleState::toSubmenuData, ::renderSubmenu)
 
         viewModel.observeNotifications(this) {
@@ -178,7 +181,7 @@ class RootActivity : AppCompatActivity(), IArticleView {
         }
     }
 
-    override fun renderBottombar(data: BottombarData) {
+    override fun renderBotombar(data: BottombarData) {
         with(vbBottombar) {
             btnSettings.isChecked = data.isShowMenu
             btnLike.isChecked = data.isLike

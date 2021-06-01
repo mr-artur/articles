@@ -8,11 +8,17 @@ class UserJsonAdapter : JsonAdapter<User> {
         private const val DELIMITER = ";"
     }
 
-    override fun fromJson(json: String): User = User(
-        firstName = json.substringBefore(DELIMITER),
-        lastName = json.substringAfter(DELIMITER)
-    )
+    override fun fromJson(json: String): User {
+        val parts = json.split(DELIMITER)
+        return User(
+            firstName = parts[0],
+            lastName = parts[1],
+            rating = Integer.parseInt(parts[2]),
+            respect = Integer.parseInt(parts[3])
+        )
+    }
 
-    override fun toJson(obj: User): String = arrayOf(obj.firstName, obj.lastName)
-        .joinToString(separator = DELIMITER)
+    override fun toJson(obj: User): String =
+        arrayOf(obj.firstName, obj.lastName, obj.rating, obj.respect)
+            .joinToString(separator = DELIMITER)
 }
