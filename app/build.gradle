@@ -14,7 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "ru.skillbranch.skillarticles.DexopenerJUnitRunner"
     }
 
     buildTypes {
@@ -55,4 +55,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation 'com.jraska.livedata:testing-ktx:1.1.2'
+    androidTestImplementation 'com.github.tmurakami:dexopener:2.0.5'
 }
