@@ -14,7 +14,7 @@ class UserJsonAdapter : JsonAdapter<User> {
             firstName = parts[0],
             lastName = parts[1],
             rating = Integer.parseInt(parts[2]),
-            respect = Integer.parseInt(parts[3])
+            respect = parts[3]
         )
     }
 

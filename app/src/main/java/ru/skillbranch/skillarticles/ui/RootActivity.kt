@@ -35,13 +35,13 @@ import ru.skillbranch.skillarticles.viewmodels.*
 class RootActivity : AppCompatActivity(), IArticleView {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val viewModel: ArticleViewModel by viewModels { ViewModelFactory(this, "0") }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val bgColor by AttrValue(R.attr.colorSecondary)
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val fgColor by AttrValue(R.attr.colorOnSecondary)
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val viewModelFactory = ViewModelFactory(this, "0")
+    private val viewModel: ArticleViewModel by viewModels { viewModelFactory }
 
     private val vb: ActivityRootBinding by viewBinding(ActivityRootBinding::inflate)
     private val vbBottombar: LayoutBottombarBinding
