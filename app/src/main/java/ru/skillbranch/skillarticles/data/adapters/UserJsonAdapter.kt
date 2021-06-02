@@ -11,14 +11,25 @@ class UserJsonAdapter : JsonAdapter<User> {
     override fun fromJson(json: String): User {
         val parts = json.split(DELIMITER)
         return User(
-            firstName = parts[0],
-            lastName = parts[1],
-            rating = parts[2],
-            respect = Integer.parseInt(parts[3])
+            id = parts[0],
+            avatar = parts[1],
+            respect = Integer.parseInt(parts[2]),
+            rating = Integer.parseInt(parts[3]),
+            about = parts[4],
+            name = parts[5]
         )
     }
 
-    override fun toJson(obj: User): String =
-        arrayOf(obj.firstName, obj.lastName, obj.rating, obj.respect)
+    override fun toJson(obj: User?): String {
+        obj ?: return ""
+        return arrayOf(
+            obj.id,
+            obj.avatar ?: "",
+            obj.respect,
+            obj.rating,
+            obj.about ?: "",
+            obj.name
+        )
             .joinToString(separator = DELIMITER)
+    }
 }

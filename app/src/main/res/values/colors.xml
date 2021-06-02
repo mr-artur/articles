@@ -15,5 +15,4 @@
     <color name="color_article_bar">@android:color/white</color>
     <color name="color_on_article_bar">#1c0e42</color>
     <color name="color_divider">#1f000000</color>
-    <color name="color_submenu_surface">@android:color/white</color>
 </resources>

@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#202020</color>
+    <color name="color_primary">#121212</color>
     <color name="color_primary_dark">#000000</color>
     <color name="color_accent">#bb86fc</color>
     <color name="color_accent_dark">#52337c</color>
-    <color name="color_gray">#1b1b1b</color>
-    <color name="color_gray_light">#bababa</color>
-    <color name="color_surface">#4e545f</color>
-    <color name="color_on_surface">#272727</color>
+    <color name="color_gray">#949494</color>
+    <color name="color_gray_light">#272727</color>
+    <color name="color_surface">#1e1e1e</color>
+    <color name="color_on_surface">#bababa</color>
 
-    <color name="color_article_bar">#202020</color>
+    <color name="color_article_bar">#121212</color>
     <color name="color_on_article_bar">@android:color/white</color>
     <color name="color_divider">#1fffffff</color>
-    <color name="color_submenu_surface">#202020</color>
 </resources>
