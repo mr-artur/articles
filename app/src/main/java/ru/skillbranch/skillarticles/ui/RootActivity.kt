@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.text.getSpans
+import androidx.lifecycle.ViewModelProvider
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.getIntDimension
 import com.google.android.material.snackbar.Snackbar
@@ -40,7 +41,7 @@ class RootActivity : AppCompatActivity(), IArticleView {
     val fgColor by AttrValue(R.attr.colorOnSecondary)
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    var viewModelFactory: ViewModelFactory = ViewModelFactory(this, "0")
+    var viewModelFactory: ViewModelProvider.Factory = ViewModelFactory(this, "0")
     private val viewModel: ArticleViewModel by viewModels { viewModelFactory }
 
     private val vb: ActivityRootBinding by viewBinding(ActivityRootBinding::inflate)
