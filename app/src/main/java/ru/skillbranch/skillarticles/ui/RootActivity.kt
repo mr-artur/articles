@@ -40,7 +40,7 @@ class RootActivity : AppCompatActivity(), IArticleView {
     val fgColor by AttrValue(R.attr.colorOnSecondary)
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val viewModelFactory = ViewModelFactory(this, "0")
+    var viewModelFactory: ViewModelFactory = ViewModelFactory(this, "0")
     private val viewModel: ArticleViewModel by viewModels { viewModelFactory }
 
     private val vb: ActivityRootBinding by viewBinding(ActivityRootBinding::inflate)

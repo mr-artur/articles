@@ -13,8 +13,8 @@ class UserJsonAdapter : JsonAdapter<User> {
         return User(
             firstName = parts[0],
             lastName = parts[1],
-            rating = Integer.parseInt(parts[2]),
-            respect = parts[3]
+            rating = parts[2],
+            respect = Integer.parseInt(parts[3])
         )
     }
 
