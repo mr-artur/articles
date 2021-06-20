@@ -9,8 +9,7 @@ class ArticleRepository(
     private val prefs: PrefManager = PrefManager()
 ) {
 
-
-    fun loadArticleContent(articleId: String): LiveData<List<String>?> {
+    fun loadArticleContent(articleId: String): LiveData<String?> {
         return network.loadArticleContent(articleId)
     }
 

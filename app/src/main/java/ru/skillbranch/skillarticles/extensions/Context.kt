@@ -1,7 +1,9 @@
 package ru.skillbranch.skillarticles.extensions
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.TypedValue
+import androidx.annotation.AttrRes
 import androidx.annotation.DimenRes
 
 fun Context.dpToPx(dp: Int): Float {
@@ -22,4 +24,10 @@ fun Context.getIntDimension(@DimenRes dimensionId: Int): Int {
 
 fun Context.getDimension(@DimenRes dimensionId: Int): Float {
     return resources.getDimension(dimensionId)
+}
+
+fun Context.attrValue(@AttrRes resId: Int): Int {
+    val tv = TypedValue()
+    if (theme.resolveAttribute(resId, tv, true)) return tv.data
+    else throw Resources.NotFoundException("Resource with id $resId not found")
 }

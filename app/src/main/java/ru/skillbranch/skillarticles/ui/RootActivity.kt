@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.text.Selection
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.method.ScrollingMovementMethod
+import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -26,6 +26,7 @@ import ru.skillbranch.skillarticles.databinding.ActivityRootBinding
 import ru.skillbranch.skillarticles.databinding.LayoutArticleSubmenuBinding
 import ru.skillbranch.skillarticles.databinding.LayoutBottombarBinding
 import ru.skillbranch.skillarticles.extensions.setMarginOptionally
+import ru.skillbranch.skillarticles.markdown.MarkdownBuilder
 import ru.skillbranch.skillarticles.ui.custom.SearchFocusSpan
 import ru.skillbranch.skillarticles.ui.custom.SearchSpan
 import ru.skillbranch.skillarticles.ui.delegates.AttrValue
@@ -37,6 +38,7 @@ class RootActivity : AppCompatActivity(), IArticleView {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val bgColor by AttrValue(R.attr.colorSecondary)
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val fgColor by AttrValue(R.attr.colorOnSecondary)
 
@@ -158,10 +160,11 @@ class RootActivity : AppCompatActivity(), IArticleView {
 
         with(vb.tvTextContent) {
             textSize = if (data.isBigText) 18f else 14f
-            movementMethod = ScrollingMovementMethod()
-            val content = if (data.isLoadingContent) "Loading" else data.content.first()
-            if (text.toString() == content) return@with
-            setText(content, TextView.BufferType.SPANNABLE)
+            movementMethod = LinkMovementMethod()
+
+            MarkdownBuilder(context)
+                .markdownToSpan(data.content)
+                .run { setText(this, TextView.BufferType.SPANNABLE) }
         }
 
         with(vb.toolbar) {
@@ -273,7 +276,8 @@ class RootActivity : AppCompatActivity(), IArticleView {
 
         when (notification) {
 
-            is Notify.TextMessage -> { /* nothing */ }
+            is Notify.TextMessage -> { /* nothing */
+            }
 
             is Notify.ActionMessage -> {
                 with(snackbar) {

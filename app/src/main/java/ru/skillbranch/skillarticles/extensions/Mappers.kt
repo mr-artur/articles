@@ -58,6 +58,6 @@ fun ArticleState.fromMap(map: Map<String, Any?>): ArticleState = copy(
     date = map["date"] as String,
     author = map["author"] as Any,
     poster = map["poster"] as String,
-    content = map["content"] as List<String>,
+    content = map["content"] as String,
     reviews = map["reviews"] as List<Any>,
 )
