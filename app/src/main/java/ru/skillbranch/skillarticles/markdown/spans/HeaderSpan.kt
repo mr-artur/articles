@@ -1,8 +1,10 @@
 package ru.skillbranch.skillarticles.markdown.spans
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.text.Layout
+import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.LeadingMarginSpan
 import android.text.style.LineHeightSpan
@@ -64,29 +66,105 @@ class HeaderSpan(
         lineHeight: Int,
         fm: Paint.FontMetricsInt?
     ) {
-        TODO("Not yet implemented")
+        fm ?: return
+
+        text as Spanned
+        val spanStart = text.getSpanStart(this)
+        val spanEnd = text.getSpanEnd(this)
+
+        if (spanStart == start) {
+            originAscent = fm.ascent
+            fm.ascent = (fm.ascent - marginTop).toInt()
+        } else {
+            fm.ascent = originAscent
+        }
+
+        // line break +1 character
+        if (spanEnd == end.dec()) {
+            val originHeight = fm.descent - originAscent
+            fm.descent = (originHeight * linePadding + marginBottom).toInt()
+        }
+
+        fm.top = fm.ascent
+        fm.bottom = fm.descent
     }
 
     override fun getLeadingMargin(first: Boolean): Int {
-        TODO("Not yet implemented")
+        return 0
     }
 
     override fun drawLeadingMargin(
-        c: Canvas?,
-        p: Paint?,
-        x: Int,
-        dir: Int,
-        top: Int,
-        baseline: Int,
-        bottom: Int,
+        canvas: Canvas?,
+        paint: Paint?,
+        currentMarginLocation: Int,
+        paragraphDirection: Int,
+        lineTop: Int,
+        lineBaseline: Int,
+        lineBottom: Int,
         text: CharSequence?,
-        start: Int,
-        end: Int,
-        first: Boolean,
+        lineStart: Int,
+        lineEnd: Int,
+        isFirstLine: Boolean,
         layout: Layout?
     ) {
-        TODO("Not yet implemented")
+        if ((level == 1 || level == 2) && (text as Spanned).getSpanEnd(this) == lineEnd) {
+            paint?.forLine {
+                val lh = (paint.descent() - paint.ascent()) * sizes.getOrElse(level) { 1f }
+                val lineOffset = lineBaseline + lh * linePadding
+
+                canvas?.drawLine(
+                    0f,
+                    lineOffset,
+                    canvas.width.toFloat(),
+                    lineOffset,
+                    paint
+                )
+            }
+        }
+//        canvas?.drawFontLines(lineTop, lineBottom, lineBaseline, paint!!)
     }
 
+    private inline fun Paint.forLine(block: () -> Unit) {
+        val oldColor = color
+        val oldStyle = style
+        val oldWidth = strokeWidth
 
+        color = dividerColor
+        style = Paint.Style.STROKE
+        strokeWidth = 0f
+
+        block()
+
+        color = oldColor
+        style = oldStyle
+        strokeWidth = oldWidth
+    }
+
+    private fun Canvas.drawFontLines(
+        top: Int,
+        bottom: Int,
+        lineBaseline: Int,
+        paint: Paint
+    ) {
+        drawLine(0f, top + 0f, width + 0f, top + 0f, Paint().apply { color = Color.BLUE })
+        drawLine(0f, bottom + 0f, width + 0f, bottom + 0f, Paint().apply { color = Color.GREEN })
+        drawLine(
+            0f,
+            lineBaseline + 0f,
+            width + 0f,
+            lineBaseline + 0f,
+            Paint().apply { color = Color.RED })
+        drawLine(
+            0f,
+            paint.ascent() + lineBaseline,
+            width + 0f,
+            paint.ascent() + lineBaseline,
+            Paint().apply { color = Color.BLACK })
+        drawLine(
+            0f,
+            paint.descent() + lineBaseline,
+            width + 0f,
+            paint.descent() + lineBaseline,
+            Paint().apply { color = Color.MAGENTA })
+    }
 }
