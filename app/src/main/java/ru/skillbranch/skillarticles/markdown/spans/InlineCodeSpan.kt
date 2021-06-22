@@ -3,21 +3,18 @@ package ru.skillbranch.skillarticles.markdown.spans
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.Typeface
 import android.text.style.ReplacementSpan
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.annotation.VisibleForTesting
 
 class InlineCodeSpan(
-    @ColorInt
-    private val textColor: Int,
-    @ColorInt
-    private val bgColor: Int,
-    @Px
-    private val cornerRadius: Float,
-    @Px
-    private val padding: Float
-) :ReplacementSpan(){
+    @ColorInt private val textColor: Int,
+    @ColorInt private val bgColor: Int,
+    @Px private val cornerRadius: Float,
+    @Px private val padding: Float
+) : ReplacementSpan() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val rect: RectF = RectF()
@@ -32,7 +29,11 @@ class InlineCodeSpan(
         end: Int,
         fm: Paint.FontMetricsInt?
     ): Int {
-        TODO("Not yet implemented")
+        paint.forText {
+            val measureText = paint.measureText(text.toString(), start, end)
+            measureWidth = (measureText + 2 * padding).toInt()
+        }
+        return measureWidth
     }
 
     override fun draw(
@@ -46,6 +47,44 @@ class InlineCodeSpan(
         bottom: Int,
         paint: Paint
     ) {
-        TODO("Not yet implemented")
+        paint.forBackground {
+            rect.set(x, top.toFloat(), x + measureWidth, bottom.toFloat())
+            canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
+        }
+
+        paint.forText {
+            text ?: return@forText
+            canvas.drawText(text, start, end, x + padding, y.toFloat(), paint)
+        }
+    }
+
+    private inline fun Paint.forText(block: () -> Unit) {
+        val oldSize = textSize
+        val oldStyle = typeface?.style ?: 0
+        val oldFont = typeface
+        val oldColor = color
+
+        color = textColor
+        typeface = Typeface.create(Typeface.MONOSPACE, oldStyle)
+        textSize *= 0.85f
+
+        block()
+
+        color = oldColor
+        typeface = oldFont
+        textSize = oldSize
+    }
+
+    private inline fun Paint.forBackground(block: () -> Unit) {
+        val oldColor = color
+        val oldStyle = style
+
+        color = bgColor
+        style = Paint.Style.FILL
+
+        block()
+
+        color = oldColor
+        style = oldStyle
     }
 }

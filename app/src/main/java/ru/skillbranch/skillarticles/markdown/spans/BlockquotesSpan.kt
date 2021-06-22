@@ -8,12 +8,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 
 class BlockquotesSpan(
-    @Px
-    private val gapWidth: Float,
-    @Px
-    private val quoteWidth: Float,
-    @ColorInt
-    private val lineColor: Int
+    @Px private val gapWidth: Float,
+    @Px private val quoteWidth: Float,
+    @ColorInt private val lineColor: Int
 ) : LeadingMarginSpan {
 
     override fun getLeadingMargin(first: Boolean): Int {

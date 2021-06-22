@@ -7,10 +7,8 @@ import androidx.annotation.ColorInt
 import androidx.annotation.Px
 
 class HorizontalRuleSpan(
-    @Px
-    val ruleWidth: Float,
-    @ColorInt
-    val ruleColor: Int
+    @Px val ruleWidth: Float,
+    @ColorInt val ruleColor: Int
 ) : ReplacementSpan() {
 
     override fun getSize(
